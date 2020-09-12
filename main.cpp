@@ -57,5 +57,19 @@ int main() {
     Matrix<double> A_svd = (dot_prod(dot_prod(U,S),t(V)));
     std::cout <<  A_svd  << std::endl;
 
+
+    /**
+     * Matrix initial Assignment
+     */
+    Matrix<int> B;
+    B.resize(0,2,2);
+    B[0][0] = 1;
+    B[0][1] = 2;
+    B[1][0] = 3;
+    B[1][1] = 4;
+
+    std::cout << B << std::endl;
+
+
     return 0;
 }
