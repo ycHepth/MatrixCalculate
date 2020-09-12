@@ -1483,6 +1483,9 @@ Matrix<T> operator*(const Matrix<T>& lhs, const Matrix<T>& rhs)
     return tmp;
 }
 
+    /**
+     * operator (*) just for constant product calculation
+     */
 template <typename T>
 Matrix<T> operator*(const Matrix<T>& lhs, const T& a)
 {

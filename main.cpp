@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Array.h"
+//#include "Array.h"
+#include "laguerre.h"
 
 int main() {
 //    std::set<unsigned int> index;
@@ -68,8 +69,11 @@ int main() {
     B[1][0] = 3;
     B[1][1] = 4;
 
-    std::cout << B << std::endl;
+    std::cout << B[0][0] << std::endl;
 
+    A = laguerre(0.8,3);
+
+    std::cout << pow(-0.8,2)*(1-0.8*0.8) << std::endl;
 
     return 0;
 }
