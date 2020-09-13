@@ -12,8 +12,8 @@
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
-//#include <algorithm>
-#include <windows.h>
+#include <algorithm>
+//#include <windows.h>
 
 enum MType { DIAG };
 
@@ -32,6 +32,8 @@ public:
     Vector<T> extract(const std::set<unsigned int>& indexes) const;
     inline T& operator[](const unsigned int& i); //i-th element
     inline const T& operator[](const unsigned int& i) const;
+    inline Vector<T> RShift(const unsigned int a);
+    inline Vector<T> LShift(const unsigned int a);
 
     inline unsigned int size() const;
     inline void resize(const unsigned int n);
@@ -474,6 +476,30 @@ inline Vector<T>& Vector<T>::operator^=(const T& a)
         v[i] = pow(v[i], a);
 
     return *this;
+}
+
+template<typename T>
+inline Vector<T> Vector<T>::RShift(const unsigned int a) {
+    Vector<T> tmp;
+    tmp.resize(n);
+
+    for(int i=0;i<a;i++)
+        tmp[i] = 0;
+    for(int j=0;j<n-a;j++)
+        tmp[j+a] = v[j];
+
+    return tmp;
+}
+
+template<typename T>
+inline Vector<T> Vector<T>::LShift(const unsigned int a) {
+    Vector<T> tmp;
+    tmp.resize(0,n);
+
+    for(int j=0;j<n-a;j++)
+        tmp[j] = v[j+a];
+
+    return tmp;
 }
 
 template <typename T>

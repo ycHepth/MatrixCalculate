@@ -58,7 +58,6 @@ int main() {
     Matrix<double> A_svd = (dot_prod(dot_prod(U,S),t(V)));
     std::cout <<  A_svd  << std::endl;
 
-
     /**
      * Matrix initial Assignment
      */
@@ -69,11 +68,7 @@ int main() {
     B[1][0] = 3;
     B[1][1] = 4;
 
-    std::cout << B[0][0] << std::endl;
-
-    A = laguerre(0.8,3);
-
-    std::cout << pow(-0.8,2)*(1-0.8*0.8) << std::endl;
+    A = laguerre(0.8,5);
 
     return 0;
 }

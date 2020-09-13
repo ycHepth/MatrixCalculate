@@ -7,5 +7,4 @@
 
 #include "Matrix.h"
 Matrix<double> laguerre(double a, unsigned int N);
-
 #endif //MATRIXCALCULATE_LAGUERRE_H
