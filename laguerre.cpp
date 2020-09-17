@@ -20,14 +20,9 @@ Matrix<double> laguerre(double a, unsigned int N){
     std::cout << L0 << std::endl;
 
     A.setColumn(0,V);
-    std::cout << A << std::endl;
 
-    std::cout << L0.LShift(2) << std::endl;
-
-    for(int j = 1;j < N-1;j++){
-        // How to change entry vector? ... hand write <.Rshift> function
-        std::cout << L0.LShift(1) << std::endl;
-
+    for(int j = 1;j < N;j++){
+        A.setColumn(j,V.RShift(j));
     }
 
     return A;

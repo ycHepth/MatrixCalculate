@@ -68,7 +68,12 @@ int main() {
     B[1][0] = 3;
     B[1][1] = 4;
 
+    //TODO:
+    //      how to return [A,L0] ?
     A = laguerre(0.8,5);
+
+    std::cout << "laguerre A: " << std::endl;
+    std::cout << A << std::endl;
 
     return 0;
 }
