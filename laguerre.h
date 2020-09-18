@@ -6,5 +6,11 @@
 #define MATRIXCALCULATE_LAGUERRE_H
 
 #include "Matrix.h"
-Matrix<double> laguerre(double a, unsigned int N);
+/**
+ * @param a : laguerre network pole
+ * @param N : laguerre network rank
+ * @return tuple : {A,L0}
+ */
+void laguerre(double a, unsigned int N, Matrix<double> &A, Vector<double> &L0);
+
 #endif //MATRIXCALCULATE_LAGUERRE_H

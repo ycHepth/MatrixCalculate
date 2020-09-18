@@ -3,10 +3,10 @@
 //
 #include "laguerre.h"
 
-Matrix<double> laguerre(double a, unsigned int N){
+void laguerre(double a, unsigned int N, Matrix<double> &A, Vector<double> &L0){
     Vector<double> V(N);
-    Vector<double> L0(N);
-    Matrix<double> A(N,N);
+    L0.resize(N);
+    A.resize(N,N);
     V[0] = a;
     L0[0] = 1;
 
@@ -16,14 +16,9 @@ Matrix<double> laguerre(double a, unsigned int N){
     }
     L0 = sqrt(1-a*a) * L0;
 
-    std::cout << "L0 : " << std::endl;
-    std::cout << L0 << std::endl;
-
     A.setColumn(0,V);
 
     for(int j = 1;j < N;j++){
         A.setColumn(j,V.RShift(j));
     }
-
-    return A;
 }

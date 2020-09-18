@@ -12,10 +12,11 @@
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 #include <algorithm>
 //#include <windows.h>
 
-enum MType { DIAG };
+enum MType { DIAG,TRANS};
 
 template <typename T>
 class Vector
@@ -34,6 +35,7 @@ public:
     inline const T& operator[](const unsigned int& i) const;
     inline Vector<T> RShift(const unsigned int a);
     inline Vector<T> LShift(const unsigned int a);
+//    inline Vector<T> transpose();
 
     inline unsigned int size() const;
     inline void resize(const unsigned int n);
@@ -502,6 +504,7 @@ inline Vector<T> Vector<T>::LShift(const unsigned int a) {
     return tmp;
 }
 
+
 template <typename T>
 inline bool operator==(const Vector<T>& v, const Vector<T>& w)
 {
@@ -904,6 +907,7 @@ public:
 
     inline void resize(const unsigned int n, const unsigned int m);
     inline void resize(const T& a, const unsigned int n, const unsigned int m);
+    inline void size(unsigned int &rows, unsigned int &cols);
 
 
     inline Vector<T> extractRow(const unsigned int i) const;
@@ -915,6 +919,7 @@ public:
 
     inline void set(const T* a, unsigned int n, unsigned int m);
     inline void set(const std::set<unsigned int>& r_indexes, const std::set<unsigned int>& c_indexes, const Matrix<T>& m);
+    inline void range_set(std::vector<unsigned int> r_indexes, std::vector<unsigned int> c_indexes, const Matrix<T>& m);
     inline void setRow(const unsigned int index, const Vector<T>& v);
     inline void setRow(const unsigned int index, const Matrix<T>& v);
     inline void setRows(const std::set<unsigned int>& indexes, const Matrix<T>& m);
@@ -1037,6 +1042,13 @@ Matrix<T>::Matrix(MType t, const Vector<T>& a, const T& o, unsigned int n, unsig
                     else
                         v[i][j] = a[i];
             break;
+
+        case TRANS:
+            for (i = 0; i < n; i++)
+                for (j = 0; j < m; j++)
+                        v[i][j] = a[j];
+            break;
+
         default:
             throw std::logic_error("Matrix type not supported");
     }
@@ -1357,6 +1369,41 @@ inline void Matrix<T>::set(const std::set<unsigned int>& r_indexes, const std::s
     }
 }
 
+/**
+ *      set cols/rows between first and last index to ref matrix m
+ * @tparam T
+ * @param r_indexes :  given index of first and last rows, default start from index 0
+ * @param c_indexes :  given index of first and last cols, default start from index 0
+ * @param m
+ */
+template <typename T>
+inline void  Matrix<T>::range_set(std::vector<unsigned int> r_indexes, std::vector<unsigned int> c_indexes, const Matrix<T>& a){
+    unsigned int i = 0,j;
+    unsigned int r_len = r_indexes.back() - r_indexes.front() + 1;
+    unsigned int c_len = c_indexes.back() - c_indexes.front() + 1;
+
+    if (c_len != a.ncols() || r_len != a.nrows())
+        throw std::logic_error("Error setting matrix elements: ranges are not compatible");
+
+    for (int r_el = r_indexes.front() ;r_el < r_len + r_indexes.front(); r_el++)
+    {
+        if (r_el >= n)
+            throw std::logic_error("Error in set: trying to set a row out of matrix bounds");
+        j = 0;
+        for (int c_el = c_indexes.front() ;c_el < c_len + c_indexes.front(); c_el++)
+        {
+            if (c_el >= m)
+                throw std::logic_error("Error in set: trying to set a column out of matrix bounds");
+            v[r_el][c_el] = a[i][j];
+            j++;
+        }
+        i++;
+    }
+
+}
+
+
+
 /* set specified nxm submatrix with constant array a */
 template <typename T>
 inline void Matrix<T>::set(const T* a, unsigned int n, unsigned int m)
@@ -1658,6 +1705,20 @@ inline Matrix<T>::operator Vector<T>()
         return extractColumn(0);
 }
 
+/**
+ * @tparam T
+ * @param a : operated matrix a
+ * @ref_param rows
+ * @ref_param cols
+ */
+template<typename T>
+void Matrix<T>::size(unsigned int &rows, unsigned int &cols) {
+    rows = n;
+    cols = m;
+}
+
+
+
 template <typename T>
 inline bool operator==(const Matrix<T>& a, const Matrix<T>& b)
 {
@@ -1694,8 +1755,8 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& m)
     for (unsigned int i = 0; i < m.nrows(); i++)
     {
         for (unsigned int j = 0; j < m.ncols() - 1; j++)
-            os << std::setw(20) << std::setprecision(16) << m[i][j] << ", ";
-        os << std::setw(20) << std::setprecision(16) << m[i][m.ncols() - 1] << std::endl;
+            os << std::setw(10) << std::setprecision(6) << m[i][j] << ", ";
+        os << std::setw(10) << std::setprecision(6) << m[i][m.ncols() - 1] << std::endl;
     }
 
     return os;
@@ -2497,6 +2558,8 @@ Vector<T> r_min(const Matrix<T>& m)
 /**
    Single element mathematical functions
 */
+
+
 
 template <typename T>
 Matrix<T> exp(const Matrix<T>&m)
