@@ -170,5 +170,15 @@ int main() {
 //    laguerreTest();
 //    AugmentedSystemTest();
 //    N_expTest(5);
+
+
+    Vector<double> A;
+    A.resize(2,4);
+    std::cout << A << std::endl;
+    Matrix<double> m;
+    m = Matrix(TRANS,A,0.0,A.size(),1);
+    std::cout << m << std::endl;
+
+
     return 0;
 }

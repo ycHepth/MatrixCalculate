@@ -30,6 +30,7 @@ public:
     ~Vector(); // destructor
 
     inline void set(const T* a, const unsigned int n);
+    inline void set(Vector<T> a, const unsigned int n);
     Vector<T> extract(const std::set<unsigned int>& indexes) const;
     inline T& operator[](const unsigned int& i); //i-th element
     inline const T& operator[](const unsigned int& i) const;
@@ -504,6 +505,13 @@ inline Vector<T> Vector<T>::LShift(const unsigned int a) {
     return tmp;
 }
 
+template<typename T>
+void Vector<T>::set(Vector<T> a, const unsigned int n) {
+    resize(n);
+    for (unsigned int i = 0; i < n; i++)
+        v[i] = a[i];
+}
+
 
 template <typename T>
 inline bool operator==(const Vector<T>& v, const Vector<T>& w)
@@ -579,8 +587,8 @@ inline std::ostream& operator<<(std::ostream& os, const Vector<T>& v)
 {
     os << std::endl << "size of vector: " << v.size() << std::endl;
     for (unsigned int i = 0; i < v.size() - 1; i++)
-        os << std::setw(20) << std::setprecision(16) << v[i] << ", ";
-    os << std::setw(20) << std::setprecision(16) << v[v.size() - 1] << std::endl;
+        os << std::setw(20) << std::setprecision(6) << v[i] << ", ";
+    os << std::setw(20) << std::setprecision(6) << v[v.size() - 1] << std::endl;
 
     return os;
 }
@@ -897,6 +905,7 @@ public:
     Matrix(const unsigned int n, const unsigned int m); // Construct a n x m matrix
     Matrix(const T& a, const unsigned int n, const unsigned int m); // Initialize the content to constant a
     Matrix(MType t, const T& a, const T& o, const unsigned int n, const unsigned int m);
+    Matrix(const Vector<T>& a); // transfer vector to column matrix
     Matrix(MType t, const Vector<T>& v, const T& o, const unsigned int n, const unsigned int m);
     Matrix(const T* a, const unsigned int n, const unsigned int m); // Initialize to array
     Matrix(const Matrix<T>& rhs); // Copy constructor
@@ -1043,6 +1052,7 @@ Matrix<T>::Matrix(MType t, const Vector<T>& a, const T& o, unsigned int n, unsig
                         v[i][j] = a[i];
             break;
 
+        // TRANS: transfer vector to column matrix
         case TRANS:
             for (i = 0; i < n; i++)
                 for (j = 0; j < m; j++)
@@ -1705,18 +1715,18 @@ inline Matrix<T>::operator Vector<T>()
         return extractColumn(0);
 }
 
-/**
- * @tparam T
- * @param a : operated matrix a
- * @ref_param rows
- * @ref_param cols
- */
+
 template<typename T>
 void Matrix<T>::size(unsigned int &rows, unsigned int &cols) {
     rows = n;
     cols = m;
 }
 
+template<typename T>
+Matrix<T>::Matrix(const Vector<T>& a) {
+    unsigned int rows = a.size();
+    this = Matrix(TRANS,a,0.0,1,rows);
+}
 
 
 template <typename T>
